@@ -135,7 +135,21 @@ textarea {
 <textarea id="resultado"></textarea>
 
 <html>
-<input type="text" id="competencia" placeholder="Competência">
+  <label>Unidade</label>
+<select id="unidade">
+<option>Y01</option>
+<option>Y02</option>
+<option>Y03</option>
+<option>Y04</option>
+<option>Y08</option>
+<option>Y12</option>
+<option>N01</option>
+<option>N04</option>
+<option>N06</option>
+<option>P02</option>
+<option>YP1</option>
+<option>CM1</option>
+</select>
 <input type="text" id="empresaTerceirizada" placeholder="Empresa">
 <input type="number" id="quantidade" placeholder="Quantidade">
 <input type="date" id="datas">
@@ -184,7 +198,7 @@ function atualizarLista() {
         `;
     });
 }
-</script>
+<script>
 
 function remover(index) {
   lista.splice(index, 1);
