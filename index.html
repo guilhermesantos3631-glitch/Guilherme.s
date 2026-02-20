@@ -181,8 +181,7 @@ button:hover {
 <option>CM1</option>
 </select>
 
-<label>Competência</label>
-<select id="competencia">
+  
 <option>Civil</option>
 <option>Elétrica</option>
 <option>Mecânica</option>
@@ -275,6 +274,8 @@ button:hover {
 
 <script>
 let lista = [];
+  let principalAdicionada = false;
+let competenciaPrincipalGlobal = "";
 
 function abrirModal(){
   document.getElementById("modal").style.display = "flex";
@@ -285,7 +286,12 @@ function fecharModal(){
 }
 
 function salvarModal(){
-  let competencia = document.getElementById("m_competencia").value;
+
+  if(!principalAdicionada){
+    alert("Adicione primeiro a refeição principal.");
+    return;
+  }
+
   let empresa = document.getElementById("m_empresa").value;
   let quantidade = document.getElementById("m_quantidade").value;
   let datas = document.getElementById("m_datas").value;
@@ -295,6 +301,19 @@ function salvarModal(){
     alert("Preencha todos os campos!");
     return;
   }
+
+  lista.push({
+    competencia: competenciaPrincipalGlobal,
+    empresaTerceirizada: empresa,
+    quantidade,
+    datas,
+    periodo
+  });
+
+  atualizarLista();
+  atualizarContador();
+  fecharModal();
+}
 
   lista.push({ competencia, empresaTerceirizada: empresa, quantidade, datas, periodo });
 
@@ -308,11 +327,13 @@ function atualizarContador(){
   "Refeições extras adicionadas: " + lista.length;
 }
 
-function adicionarRefeicao() {
-  salvarPrincipal();
-}
-
 function salvarPrincipal(){
+
+  if(principalAdicionada){
+    alert("A refeição principal já foi adicionada. Use '+ Adicionar Refeição Extra'.");
+    return;
+  }
+
   let competencia = document.getElementById("competencia").value;
   let empresa = document.getElementById("empresaTerceirizada").value;
   let quantidade = document.getElementById("quantidade").value;
@@ -320,11 +341,22 @@ function salvarPrincipal(){
   let periodo = document.getElementById("periodo").value;
 
   if (!empresa || !quantidade || !datas) {
-    alert("Preencha todos os campos da refeição!");
+    alert("Preencha todos os campos da refeição principal!");
     return;
   }
 
-  lista.push({ competencia, empresaTerceirizada: empresa, quantidade, datas, periodo });
+  competenciaPrincipalGlobal = competencia;
+
+  lista.push({
+    competencia,
+    empresaTerceirizada: empresa,
+    quantidade,
+    datas,
+    periodo
+  });
+
+  principalAdicionada = true;
+
   atualizarLista();
 }
 
