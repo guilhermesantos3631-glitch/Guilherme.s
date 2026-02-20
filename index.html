@@ -48,9 +48,22 @@ button:hover {
   background: #1e4ed8;
 }
 
-textarea {
-  height: 150px;
-  resize: vertical;
+/* Modal */
+#modal {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.4);
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-box {
+  background:white;
+  padding:20px;
+  width:90%;
+  max-width:500px;
+  border-radius:10px;
 }
 </style>
 </head>
@@ -108,6 +121,12 @@ textarea {
 
 <button type="button" onclick="adicionarRefeicao()">Adicionar Refeição</button>
 
+<button type="button" onclick="abrirModal()" style="background:#10b981;margin-top:10px;">
++ Adicionar Refeição Extra
+</button>
+
+<div id="contadorRefeicoes" style="margin-top:10px;font-weight:bold;"></div>
+
 <h3>Lista adicionada:</h3>
 <div id="listaRefeicoes"></div>
 
@@ -115,52 +134,117 @@ textarea {
 
 <h3>Texto Gerado</h3>
 <textarea id="resultado"></textarea>
+</div>
 
+<!-- MODAL -->
+<div id="modal">
+  <div class="modal-box">
+    <h3>Adicionar Refeição Extra</h3>
+
+    <label>Competência</label>
+    <select id="m_competencia">
+      <option>Civil</option>
+      <option>Elétrica</option>
+      <option>Mecânica</option>
+      <option>Automações</option>
+    </select>
+
+    <label>Empresa terceirizada</label>
+    <input id="m_empresa">
+
+    <label>Quantidade</label>
+    <input type="number" id="m_quantidade">
+
+    <label>Período (datas)</label>
+    <input id="m_datas">
+
+    <label>Almoço / Janta</label>
+    <select id="m_periodo">
+      <option>Almoço</option>
+      <option>Janta</option>
+      <option>Almoço e Janta</option>
+    </select>
+
+    <div style="display:flex; gap:10px; margin-top:15px;">
+      <button onclick="salvarModal()">Salvar</button>
+      <button onclick="fecharModal()" style="background:#ef4444;">Cancelar</button>
+    </div>
+  </div>
 </div>
 
 <script>
 let lista = [];
 
+function abrirModal(){
+  document.getElementById("modal").style.display = "flex";
+}
+
+function fecharModal(){
+  document.getElementById("modal").style.display = "none";
+}
+
+function salvarModal(){
+  let competencia = document.getElementById("m_competencia").value;
+  let empresa = document.getElementById("m_empresa").value;
+  let quantidade = document.getElementById("m_quantidade").value;
+  let datas = document.getElementById("m_datas").value;
+  let periodo = document.getElementById("m_periodo").value;
+
+  if(!empresa || !quantidade || !datas){
+    alert("Preencha todos os campos!");
+    return;
+  }
+
+  lista.push({ competencia, empresaTerceirizada: empresa, quantidade, datas, periodo });
+
+  atualizarLista();
+  atualizarContador();
+  fecharModal();
+}
+
+function atualizarContador(){
+  document.getElementById("contadorRefeicoes").innerText =
+  "Refeições extras adicionadas: " + lista.length;
+}
+
 function adicionarRefeicao() {
-    let competencia = document.getElementById("competencia").value;
-    let empresaTerceirizada = document.getElementById("empresaTerceirizada").value;
-    let quantidade = document.getElementById("quantidade").value;
-    let datas = document.getElementById("datas").value;
-    let periodo = document.getElementById("periodo").value;
+  salvarPrincipal();
+}
 
-    if (!competencia || !empresaTerceirizada || !quantidade || !datas) {
-        alert("Preencha todos os campos da refeição!");
-        return;
-    }
+function salvarPrincipal(){
+  let competencia = document.getElementById("competencia").value;
+  let empresa = document.getElementById("empresaTerceirizada").value;
+  let quantidade = document.getElementById("quantidade").value;
+  let datas = document.getElementById("datas").value;
+  let periodo = document.getElementById("periodo").value;
 
-    lista.push({
-        competencia,
-        empresaTerceirizada,
-        quantidade,
-        datas,
-        periodo
-    });
+  if (!empresa || !quantidade || !datas) {
+    alert("Preencha todos os campos da refeição!");
+    return;
+  }
 
-    atualizarLista();
+  lista.push({ competencia, empresaTerceirizada: empresa, quantidade, datas, periodo });
+  atualizarLista();
 }
 
 function atualizarLista() {
-    let container = document.getElementById("listaRefeicoes");
-    container.innerHTML = "";
+  let container = document.getElementById("listaRefeicoes");
+  container.innerHTML = "";
 
-    lista.forEach((item, index) => {
-        container.innerHTML += `
-        <div style="background:#f1f1f1;padding:8px;margin-bottom:5px;border-radius:6px;">
-            ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
-            <button onclick="remover(${index})" style="margin-top:5px;background:red;">Remover</button>
-        </div>
-        `;
-    });
+  lista.forEach((item, index) => {
+    container.innerHTML += `
+    <div style="background:#f1f1f1;padding:8px;margin-bottom:5px;border-radius:6px;">
+      ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
+      <button onclick="remover(${index})" style="margin-top:5px;background:red;">Remover</button>
+    </div>
+    `;
+  });
 }
 
 function remover(index) {
   lista.splice(index, 1);
   atualizarLista();
+  atualizarContador();
 }
 
 function gerarTexto(){
