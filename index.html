@@ -48,6 +48,34 @@ button:hover {
   background: #1e4ed8;
 }
 
+/* ===== LISTA ===== */
+.item-lista {
+  background:#f1f1f1;
+  padding:10px;
+  margin-bottom:8px;
+  border-radius:8px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.item-texto {
+  flex:1;
+  word-break:break-word;
+}
+
+.btn-excluir {
+  background:#dc2626;
+  width:auto;
+  padding:6px 12px;
+}
+
+.btn-excluir:hover {
+  background:#b91c1c;
+}
+
 /* ===== MODAL ===== */
 #modal {
   display:none;
@@ -62,21 +90,22 @@ button:hover {
 .modal-box {
   background:white;
   width:95%;
-  max-width:520px;
+  max-width:500px;
   border-radius:14px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-  padding:20px;
+  padding:25px;
 }
 
 .modal-header {
   background:#2563eb;
   color:white;
-  padding:10px;
+  padding:12px;
   border-radius:8px;
   display:flex;
   justify-content:space-between;
   align-items:center;
   margin-bottom:15px;
+  font-size:16px;
 }
 
 .close-btn {
@@ -96,18 +125,10 @@ button:hover {
 
 <label>Unidade</label>
 <select id="unidade">
-<option>Y01</option>
-<option>Y02</option>
-<option>Y03</option>
-<option>Y04</option>
-<option>Y08</option>
-<option>Y12</option>
-<option>N01</option>
-<option>N04</option>
-<option>N06</option>
-<option>P02</option>
-<option>YP1</option>
-<option>CM1</option>
+<option>Y01</option><option>Y02</option><option>Y03</option>
+<option>Y04</option><option>Y08</option><option>Y12</option>
+<option>N01</option><option>N04</option><option>N06</option>
+<option>P02</option><option>YP1</option><option>CM1</option>
 </select>
 
 <label>Competência</label>
@@ -154,7 +175,7 @@ button:hover {
 <button onclick="gerarTexto()">Gerar Texto</button>
 
 <h3>Texto Gerado</h3>
-<textarea id="resultado"></textarea>
+<textarea id="resultado" rows="16" style="resize:vertical;"></textarea>
 </div>
 
 <!-- MODAL -->
@@ -227,6 +248,7 @@ function salvarPrincipal(){
 
   principalAdicionada = true;
   atualizarLista();
+  atualizarContador();
 }
 
 function salvarModal(){
@@ -253,9 +275,20 @@ function salvarModal(){
   fecharModal();
 }
 
+function remover(index){
+  if(index === 0){
+    principalAdicionada = false;
+    competenciaPrincipalGlobal = "";
+  }
+  lista.splice(index, 1);
+  atualizarLista();
+  atualizarContador();
+}
+
 function atualizarContador(){
+  let extras = lista.length > 0 ? lista.length - 1 : 0;
   document.getElementById("contadorRefeicoes").innerText =
-  "Refeições extras adicionadas: " + (lista.length - 1);
+  "Refeições extras adicionadas: " + extras;
 }
 
 function atualizarLista() {
@@ -264,14 +297,12 @@ function atualizarLista() {
 
   lista.forEach((item, index) => {
     container.innerHTML += `
-    <div style="background:#f1f1f1;padding:8px;margin-bottom:5px;border-radius:6px;">
-      ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
-    </div>
-
-      <button class="btn-excluir" onclick="remover(${index})">
-        Excluir
-      </button>
-    </div>
+      <div class="item-lista">
+        <div class="item-texto">
+          ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
+        </div>
+        <button class="btn-excluir" onclick="remover(${index})">Excluir</button>
+      </div>
     `;
   });
 }
