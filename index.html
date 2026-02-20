@@ -134,7 +134,7 @@ textarea {
 <h3>Texto Gerado</h3>
 <textarea id="resultado"></textarea>
 
-<html></html>
+<html>
 <input type="text" id="competencia" placeholder="Competência">
 <input type="text" id="empresaTerceirizada" placeholder="Empresa">
 <input type="number" id="quantidade" placeholder="Quantidade">
@@ -145,47 +145,46 @@ textarea {
 
 <h3>Lista adicionada:</h3>
 <div id="listaRefeicoes"></div>
-  
+
 <script>
 let lista = [];
 
 function adicionarRefeicao() {
-  let competencia = document.getElementById("competencia").value;
-  let empresaTerceirizada = document.getElementById("empresaTerceirizada").value;
-  let quantidade = document.getElementById("quantidade").value;
-  let datas = document.getElementById("datas").value;
-  let periodo = document.getElementById("periodo").value;
+    let competencia = document.getElementById("competencia").value;
+    let empresaTerceirizada = document.getElementById("empresaTerceirizada").value;
+    let quantidade = document.getElementById("quantidade").value;
+    let datas = document.getElementById("datas").value;
+    let periodo = document.getElementById("periodo").value;
 
-  if (!competencia || !empresaTerceirizada || !quantidade || !datas) {
-    alert("Preencha todos os campos da refeição!");
-    return;
-  }
+    if (!competencia || !empresaTerceirizada || !quantidade || !datas) {
+        alert("Preencha todos os campos da refeição!");
+        return;
+    }
 
-  lista.push({
-    competencia,
-    empresaTerceirizada,
-    quantidade,
-    datas,
-    periodo
+    lista.push({
+        competencia,
+        empresaTerceirizada,
+        quantidade,
+        datas,
+        periodo
+    });
 
-  });
-
-  atualizarLista();
+    atualizarLista();
 }
 
 function atualizarLista() {
-  let container = document.getElementById("listaRefeicoes");
-  container.innerHTML = "";
+    let container = document.getElementById("listaRefeicoes");
+    container.innerHTML = "";
 
-  lista.forEach((item, index) => {
-    container.innerHTML += `
-      <div style="background:#f1f1f1;padding:8px;margin-bottom:5px;border-radius:6px;">
-        ${item.competencia} - ${item.datas} - ${item.quantidade} ${item.periodo}(s) (${item.empresaTerceirizada})
-        <button onclick="remover(${index})" style="float:right;background:red;color:white;border:none;padding:3px 6px;">X</button>
-      </div>
-    `;
-  });
+    lista.forEach((item) => {
+        container.innerHTML += `
+        <div style="background:#f1f1f1;padding:8px;margin-bottom:5px;border-radius:6px;">
+            ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
+        </div>
+        `;
+    });
 }
+</script>
 
 function remover(index) {
   lista.splice(index, 1);
