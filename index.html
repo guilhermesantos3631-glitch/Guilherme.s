@@ -137,15 +137,94 @@ textarea {
 </div>
 
 <script>
+<script>
+let lista = [];
+
+function adicionarRefeicao() {
+  let competencia = document.getElementById("competencia").value;
+  let empresaTerceirizada = document.getElementById("empresaTerceirizada").value;
+  let quantidade = document.getElementById("quantidade").value;
+  let datas = document.getElementById("datas").value;
+  let periodo = document.getElementById("periodo").value;
+  <button type="button" onclick="adicionarRefeicao()">Adicionar Refeição</button>
+
+<h3>Lista adicionada:</h3>
+<div id="listaRefeicoes"></div>
+
+
+  if (!competencia || !empresaTerceirizada || !quantidade || !datas) {
+    alert("Preencha todos os campos da refeição!");
+    return;
+  }
+
+  lista.push({
+    competencia,
+    empresaTerceirizada,
+    quantidade,
+    datas,
+    periodo
+  });
+
+  atualizarLista();
+}
+
+function atualizarLista() {
+  let container = document.getElementById("listaRefeicoes");
+  container.innerHTML = "";
+
+  lista.forEach((item, index) => {
+    container.innerHTML += `
+      <div style="background:#f1f1f1;padding:8px;margin-bottom:5px;border-radius:6px;">
+        ${item.competencia} - ${item.datas} - ${item.quantidade} ${item.periodo}(s) (${item.empresaTerceirizada})
+        <button onclick="remover(${index})" style="float:right;background:red;color:white;border:none;padding:3px 6px;">X</button>
+      </div>
+    `;
+  });
+}
+
+function remover(index) {
+  lista.splice(index, 1);
+  atualizarLista();
+}
+
 function gerarTexto(){
 let unidade = document.getElementById("unidade").value;
-let competencia = document.getElementById("competencia").value;
-let empresaTerceirizada = document.getElementById("empresaTerceirizada").value;
 let empresaRefeicao = document.getElementById("empresaRefeicao").value;
-let quantidade = document.getElementById("quantidade").value;
-let datas = document.getElementById("datas").value;
-let periodo = document.getElementById("periodo").value;
 let nomes = document.getElementById("nomes").value;
+
+let agrupado = {};
+
+lista.forEach(item => {
+  if (!agrupado[item.competencia]) {
+    agrupado[item.competencia] = [];
+  }
+  agrupado[item.competencia].push(item);
+});
+
+let textoFinal = `Prezados(as),
+
+Segue lista de refeições.
+Empresa: ${empresaRefeicao}
+
+`;
+
+for (let comp in agrupado) {
+  textoFinal += `${comp}:\n`;
+  agrupado[comp].forEach(item => {
+    textoFinal += `${item.datas} - ${item.quantidade} ${item.periodo}(s) (${item.empresaTerceirizada})\n`;
+  });
+  textoFinal += `\n`;
+}
+
+textoFinal += `Unidade: ${unidade}
+
+Terceirizados:
+${nomes}`;
+
+document.getElementById("resultado").value = textoFinal;
+}
+</script>
+
 
 let texto = `Prezados(as),
 
