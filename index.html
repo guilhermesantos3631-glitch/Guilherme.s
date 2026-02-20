@@ -1,14 +1,81 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head> <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 <title>Sistema de Refeições</title>
 <style>
-body { font-family: Arial; background:#f4f4f4; padding:40px; }
-.container { background:white; padding:20px; border-radius:10px; max-width:700px; margin:auto; }
-input, select, textarea { width:100%; padding:8px; margin:5px 0 15px; }
-button { padding:10px; background:#2563eb; color:white; border:none; cursor:pointer; }
-textarea { height:150px; }
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  padding: 40px;
+  margin: 0;
+}
+
+.container {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  max-width: 700px;
+  margin: auto;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 12px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+  width: 100%;
+}
+
+button:hover {
+  background: #1e4ed8;
+}
+
+textarea {
+  height: 150px;
+  resize: vertical;
+}
+
+/* 📱 Ajuste para celular */
+@media (max-width: 600px) {
+  body {
+    padding: 15px;
+  }
+
+  .container {
+    padding: 15px;
+    border-radius: 8px;
+  }
+
+  h2 {
+    font-size: 18px;
+    text-align: center;
+  }
+
+  input, select, textarea {
+    font-size: 16px;
+  }
+
+  button {
+    font-size: 16px;
+  }
+}
+
 </style>
 </head>
 <body>
