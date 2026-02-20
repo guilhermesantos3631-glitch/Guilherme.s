@@ -248,24 +248,7 @@ function salvarModal(){
     periodo
   });
 
-  function atualizarLista() {
-  let container = document.getElementById("listaRefeicoes");
-  container.innerHTML = "";
-
-  lista.forEach((item, index) => {
-    container.innerHTML += `
-    <div class="item-lista">
-      <div class="texto-item">
-        ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
-      </div>
-
-      <button class="btn-excluir" onclick="remover(${index})">
-        Excluir
-      </button>
-    </div>
-    `;
-  });
-}
+  atualizarLista();
   atualizarContador();
   fecharModal();
 }
@@ -281,8 +264,14 @@ function atualizarLista() {
 
   lista.forEach((item, index) => {
     container.innerHTML += `
-    <div style="background:#f1f1f1;padding:8px;margin-bottom:5px;border-radius:6px;">
-      ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
+    <div class="item-lista">
+      <div class="texto-item">
+        ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
+      </div>
+
+      <button class="btn-excluir" onclick="remover(${index})">
+        Excluir
+      </button>
     </div>
     `;
   });
