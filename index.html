@@ -1,9 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Solicitação de Refeições</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#f5f5f5;
+  padding:20px;
+}
+
+.container{
+  max-width:800px;
+  margin:auto;
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+input, select, textarea{
+  width:100%;
+  padding:8px;
+  margin-bottom:10px;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+
+button{
+  padding:8px 12px;
+  border:none;
+  border-radius:6px;
+  background:#2563eb;
+  color:#fff;
+  cursor:pointer;
+}
+
+button:hover{
+  opacity:0.9;
+}
+
+#modal{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.5);
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-content{
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  width:400px;
+}
+
+#listaRefeicoes{
+  margin-top:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Refeição Principal</h2>
+
+<input id="competencia" placeholder="Competência (ex: 05/2026)">
+<input id="empresaTerceirizada" placeholder="Empresa Terceirizada">
+<input id="quantidade" type="number" placeholder="Quantidade">
+<input id="datas" placeholder="Datas (ex: 10,11,12/05)">
+<select id="periodo">
+  <option value="Almoço">Almoço</option>
+  <option value="Jantar">Jantar</option>
+</select>
+
+<button onclick="salvarPrincipal()">Salvar Principal</button>
+<button onclick="abrirModal()">Adicionar Extra</button>
+
+<p id="contadorRefeicoes">Refeições extras adicionadas: 0</p>
+
+<div id="listaRefeicoes"></div>
+
+<hr>
+
+<h3>Dados Finais</h3>
+
+<input id="unidade" placeholder="Unidade">
+<input id="empresaRefeicao" placeholder="Empresa da Refeição">
+<textarea id="nomes" rows="4" placeholder="Nome dos terceirizados"></textarea>
+
+<button onclick="gerarTexto()">Gerar Texto</button>
+
+<textarea id="resultado" rows="10"></textarea>
+
+</div>
+
+<!-- MODAL -->
+<div id="modal">
+  <div class="modal-content">
+    <h3>Adicionar Refeição Extra</h3>
+
+    <input id="m_empresa" placeholder="Empresa Terceirizada">
+    <input id="m_quantidade" type="number" placeholder="Quantidade">
+    <input id="m_datas" placeholder="Datas">
+    <select id="m_periodo">
+      <option value="Almoço">Almoço</option>
+      <option value="Jantar">Jantar</option>
+    </select>
+
+    <button onclick="salvarModal()">Salvar</button>
+    <button onclick="fecharModal()">Fechar</button>
+  </div>
+</div>
+
 <script>
+document.addEventListener("DOMContentLoaded", function(){
+
 let lista = [];
 let principalAdicionada = false;
 let competenciaPrincipalGlobal = "";
 
-function abrirModal(){
+window.abrirModal = function(){
   if(!principalAdicionada){
     alert("Adicione primeiro a refeição principal.");
     return;
@@ -11,11 +135,11 @@ function abrirModal(){
   document.getElementById("modal").style.display = "flex";
 }
 
-function fecharModal(){
+window.fecharModal = function(){
   document.getElementById("modal").style.display = "none";
 }
 
-function salvarPrincipal(){
+window.salvarPrincipal = function(){
   if(principalAdicionada){
     alert("A refeição principal já foi adicionada.");
     return;
@@ -42,7 +166,7 @@ function salvarPrincipal(){
   atualizarContador();
 }
 
-function salvarModal(){
+window.salvarModal = function(){
   let empresa = document.getElementById("m_empresa").value;
   let quantidade = document.getElementById("m_quantidade").value;
   let datas = document.getElementById("m_datas").value;
@@ -78,52 +202,28 @@ function atualizarLista() {
 
   lista.forEach((item, index) => {
     container.innerHTML += `
-    <div style="
-      background:#f1f1f1;
-      padding:10px;
-      margin-bottom:8px;
-      border-radius:8px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-    ">
-      <div style="
-        flex:1;
-        min-width:0;
-        word-break:break-word;
-      ">
+    <div style="background:#f1f1f1;padding:10px;margin-bottom:8px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:0;word-break:break-word;">
         ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
       </div>
-
-      <button onclick="remover(${index})"
-        style="
-          background:#dc2626;
-          padding:6px 10px;
-          border-radius:6px;
-          width:auto;
-        ">
-        Excluir
-      </button>
+      <button onclick="remover(${index})" style="background:#dc2626;">Excluir</button>
     </div>
     `;
   });
 }
 
-function remover(index){
+window.remover = function(index){
   if(index === 0){
     principalAdicionada = false;
     competenciaPrincipalGlobal = "";
   }
 
   lista.splice(index, 1);
-
   atualizarLista();
   atualizarContador();
 }
 
-function gerarTexto(){
+window.gerarTexto = function(){
   let unidade = document.getElementById("unidade").value;
   let empresaRefeicao = document.getElementById("empresaRefeicao").value;
   let nomes = document.getElementById("nomes").value;
@@ -145,8 +245,9 @@ function gerarTexto(){
 
   document.getElementById("resultado").value = textoFinal;
 }
-  <script>
-console.log("JS carregou");
+
+});
+</script>
 
 </body>
 </html>
