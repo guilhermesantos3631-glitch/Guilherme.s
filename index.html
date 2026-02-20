@@ -146,12 +146,6 @@ function adicionarRefeicao() {
   let quantidade = document.getElementById("quantidade").value;
   let datas = document.getElementById("datas").value;
   let periodo = document.getElementById("periodo").value;
-  
-<button type="button" onclick="adicionarRefeicao()">Adicionar Refeição</button>
-
-<h3>Lista adicionada:</h3>
-<div id="listaRefeicoes"></div>
-
 
   if (!competencia || !empresaTerceirizada || !quantidade || !datas) {
     alert("Preencha todos os campos da refeição!");
@@ -164,6 +158,12 @@ function adicionarRefeicao() {
     quantidade,
     datas,
     periodo
+
+      
+<button type="button" onclick="adicionarRefeicao()">Adicionar Refeição</button>
+
+<h3>Lista adicionada:</h3>
+<div id="listaRefeicoes"></div>
   });
 
   atualizarLista();
