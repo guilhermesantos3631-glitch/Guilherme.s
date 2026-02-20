@@ -151,7 +151,7 @@ button:hover { background: #1e4ed8; }
 <option>Almoço e Janta</option>
 </select>
 
-<label>Nomes dos terceirizados - opicional</label>
+<label>Nomes dos terceirizados (opcional)</label>
 <textarea id="nomes"></textarea>
 
 <button type="button" onclick="salvarPrincipal()">Adicionar Refeição Principal</button>
@@ -168,7 +168,7 @@ button:hover { background: #1e4ed8; }
 <button onclick="gerarTexto()">Gerar Texto</button>
 
 <h3>Texto Gerado</h3>
-<textarea id="resultado" rows="16" style="resize:vertical;"></textarea>
+<textarea id="resultado" rows="20" style="resize:vertical;"></textarea>
 </div>
 
 <!-- MODAL -->
@@ -306,14 +306,17 @@ function atualizarLista() {
 }
 
 function gerarTexto(){
+  if(lista.length === 0){
+    alert("Adicione pelo menos uma refeição.");
+    return;
+  }
+
   let unidade = document.getElementById("unidade").value;
-  let empresaRefeicao = document.getElementById("empresaRefeicao").value;
   let nomes = document.getElementById("nomes").value.trim();
 
   let textoFinal = `Prezados(as),
 
-Segue solicitação de refeições.
-Empresa fornecedora: ${empresaRefeicao}
+Segue solicitação de refeições:
 
 `;
 
@@ -327,9 +330,8 @@ Empresa fornecedora: ${empresaRefeicao}
 
   textoFinal += `\nUnidade: ${unidade}`;
 
-  // ✅ Só adiciona se tiver nomes preenchidos
   if(nomes !== ""){
-    textoFinal += `\n\n Nomes dos terceirizados - opicional:\n${nomes}`;
+    textoFinal += `\n\nNomes dos terceirizados:\n${nomes}`;
   }
 
   document.getElementById("resultado").value = textoFinal;
