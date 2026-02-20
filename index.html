@@ -134,9 +134,17 @@ textarea {
 <h3>Texto Gerado</h3>
 <textarea id="resultado"></textarea>
 
-</div>
+<input type="text" id="competencia" placeholder="Competência">
+<input type="text" id="empresaTerceirizada" placeholder="Empresa">
+<input type="number" id="quantidade" placeholder="Quantidade">
+<input type="date" id="datas">
+<input type="text" id="periodo" placeholder="Período">
 
-<script>
+<button type="button" onclick="adicionarRefeicao()">Adicionar Refeição</button>
+
+<h3>Lista adicionada:</h3>
+<div id="listaRefeicoes"></div>
+  
 <script>
 let lista = [];
 
@@ -159,11 +167,6 @@ function adicionarRefeicao() {
     datas,
     periodo
 
-      
-<button type="button" onclick="adicionarRefeicao()">Adicionar Refeição</button>
-
-<h3>Lista adicionada:</h3>
-<div id="listaRefeicoes"></div>
   });
 
   atualizarLista();
@@ -226,22 +229,6 @@ document.getElementById("resultado").value = textoFinal;
 }
 </script>
 
-
-let texto = `Prezados(as),
-
-Segue lista de refeições.
-Empresa: ${empresaRefeicao}
-
-${competencia}:
-${datas} - ${quantidade} ${periodo}(s) (${empresaTerceirizada}).
-
-Unidade: ${unidade}
-
-Terceirizados:
-${nomes}`;
-
-document.getElementById("resultado").value = texto;
-}
 </script>
 
 </body>
