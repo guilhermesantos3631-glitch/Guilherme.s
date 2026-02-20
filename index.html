@@ -65,7 +65,99 @@ button:hover {
   max-width:500px;
   border-radius:10px;
 }
-</style>
+<style>
+/* ===== MODAL NOVO ===== */
+
+#modal {
+  display:none;
+  position:fixed;
+  inset:0;
+  backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.25);
+  justify-content:center;
+  align-items:center;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.modal-box {
+  background:white;
+  width:95%;
+  max-width:520px;
+  border-radius:14px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  padding:0;
+  overflow:hidden;
+  animation: slideUp 0.25s ease-out;
+}
+
+.modal-header {
+  background:#2563eb;
+  color:white;
+  padding:15px 20px;
+  font-weight:bold;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.modal-sub {
+  padding:15px 20px 0 20px;
+  font-size:14px;
+  color:#555;
+}
+
+.modal-box label,
+.modal-box input,
+.modal-box select {
+  margin-left:20px;
+  margin-right:20px;
+}
+
+.modal-box input,
+.modal-box select {
+  width:calc(100% - 40px);
+}
+
+.modal-actions {
+  display:flex;
+  gap:10px;
+  padding:20px;
+}
+
+.btn-save {
+  background:#16a34a;
+}
+
+.btn-save:hover {
+  background:#15803d;
+}
+
+.btn-cancel {
+  background:#9ca3af;
+}
+
+.btn-cancel:hover {
+  background:#6b7280;
+}
+
+.close-btn {
+  background:none;
+  border:none;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+/* animações */
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity:0; }
+  to { transform: translateY(0); opacity:1; }
+}
+
+@keyframes fadeIn {
+  from { opacity:0; }
+  to { opacity:1; }
+}
 </head>
 
 <body>
@@ -136,10 +228,18 @@ button:hover {
 <textarea id="resultado"></textarea>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL MELHORADO -->
 <div id="modal">
   <div class="modal-box">
-    <h3>Adicionar Refeição Extra</h3>
+
+    <div class="modal-header">
+      <span>➕ Adicionar Refeição Extra</span>
+      <button class="close-btn" onclick="fecharModal()">✖</button>
+    </div>
+
+    <p class="modal-sub">
+      Preencha as informações da refeição adicional.
+    </p>
 
     <label>Competência</label>
     <select id="m_competencia">
@@ -165,10 +265,11 @@ button:hover {
       <option>Almoço e Janta</option>
     </select>
 
-    <div style="display:flex; gap:10px; margin-top:15px;">
-      <button onclick="salvarModal()">Salvar</button>
-      <button onclick="fecharModal()" style="background:#ef4444;">Cancelar</button>
+    <div class="modal-actions">
+      <button class="btn-save" onclick="salvarModal()">Salvar Refeição</button>
+      <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
     </div>
+
   </div>
 </div>
 
