@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sistema de Refeições</title>
 
+<!-- FLATPICKR -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
+
 <style>
 body {
   font-family: Arial, sans-serif;
@@ -44,11 +49,8 @@ button {
   width: 100%;
 }
 
-button:hover {
-  background: #1e4ed8;
-}
+button:hover { background: #1e4ed8; }
 
-/* ===== LISTA ===== */
 .item-lista {
   background:#f1f1f1;
   padding:10px;
@@ -61,10 +63,7 @@ button:hover {
   flex-wrap:wrap;
 }
 
-.item-texto {
-  flex:1;
-  word-break:break-word;
-}
+.item-texto { flex:1; word-break:break-word; }
 
 .btn-excluir {
   background:#dc2626;
@@ -72,11 +71,8 @@ button:hover {
   padding:6px 12px;
 }
 
-.btn-excluir:hover {
-  background:#b91c1c;
-}
+.btn-excluir:hover { background:#b91c1c; }
 
-/* ===== MODAL ===== */
 #modal {
   display:none;
   position:fixed;
@@ -149,7 +145,7 @@ button:hover {
 <input type="number" id="quantidade">
 
 <label>Período (datas)</label>
-<input id="datas">
+<input id="datas" placeholder="Selecione o período">
 
 <label>Almoço / Janta</label>
 <select id="periodo">
@@ -193,7 +189,7 @@ button:hover {
     <input type="number" id="m_quantidade">
 
     <label>Período (datas)</label>
-    <input id="m_datas">
+    <input id="m_datas" placeholder="Selecione o período">
 
     <label>Almoço / Janta</label>
     <select id="m_periodo">
@@ -209,6 +205,18 @@ button:hover {
 </div>
 
 <script>
+flatpickr("#datas", {
+  mode: "range",
+  dateFormat: "d/m/Y",
+  locale: "pt"
+});
+
+flatpickr("#m_datas", {
+  mode: "range",
+  dateFormat: "d/m/Y",
+  locale: "pt"
+});
+
 let lista = [];
 let principalAdicionada = false;
 let competenciaPrincipalGlobal = "";
@@ -238,12 +246,11 @@ function salvarPrincipal(){
   let periodo = document.getElementById("periodo").value;
 
   if (!empresa || !quantidade || !datas) {
-    alert("Preencha todos os campos da refeição principal!");
+    alert("Preencha todos os campos!");
     return;
   }
 
   competenciaPrincipalGlobal = competencia;
-
   lista.push({ competencia, empresaTerceirizada: empresa, quantidade, datas, periodo });
 
   principalAdicionada = true;
@@ -262,13 +269,7 @@ function salvarModal(){
     return;
   }
 
-  lista.push({
-    competencia: competenciaPrincipalGlobal,
-    empresaTerceirizada: empresa,
-    quantidade,
-    datas,
-    periodo
-  });
+  lista.push({ competencia: competenciaPrincipalGlobal, empresaTerceirizada: empresa, quantidade, datas, periodo });
 
   atualizarLista();
   atualizarContador();
@@ -320,7 +321,11 @@ Empresa: ${empresaRefeicao}
 `;
 
   lista.forEach(item => {
-    textoFinal += `${item.competencia} - ${item.datas} - ${item.quantidade} ${item.periodo}(s) (${item.empresaTerceirizada})\n`;
+    let periodoFormatado = item.datas.includes(" até ")
+      ? "de " + item.datas.replace(" até ", " a ")
+      : item.datas;
+
+    textoFinal += `${item.competencia} - ${periodoFormatado} - ${item.quantidade} ${item.periodo}(s) (${item.empresaTerceirizada})\n`;
   });
 
   textoFinal += `\nUnidade: ${unidade}
