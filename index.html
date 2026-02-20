@@ -191,6 +191,36 @@ button[style*="#10b981"] {
   color: #f3e6c3;
 }
 
+/* ===== SELECT ESTILO VIDRO ===== */
+
+select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(212,175,55,0.4);
+  background: rgba(255,255,255,0.08);
+  color: #ffffff;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+/* efeito ao focar */
+select:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 15px rgba(212,175,55,0.5);
+}
+
+/* ===== COR DAS OPÇÕES ===== */
+
+select option {
+  background: #3b0000; /* vinho escuro */
+  color: #ffffff;      /* texto branco */
+}
+  
 </style>
 </head>
 
@@ -198,7 +228,7 @@ button[style*="#10b981"] {
 
 <div class="container">
 <h2>Sistema de Solicitação de Refeições</h2>
-
+  
 <label>Unidade</label>
 <select id="unidade">
 <option>Y01</option><option>Y02</option><option>Y03</option>
