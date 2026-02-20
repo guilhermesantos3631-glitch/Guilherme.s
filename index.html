@@ -128,22 +128,20 @@ function gerarTexto(){
   let empresaRefeicao = document.getElementById("empresaRefeicao").value;
   let nomes = document.getElementById("nomes").value;
 
-  let textoFinal = `Prezados(as),
+  let textoFinal = "Prezados(as),\n\n";
+  textoFinal += "Segue lista de refeições.\n";
+  textoFinal += "Empresa: " + empresaRefeicao + "\n\n";
 
-Segue lista de refeições.
-Empresa: ${empresaRefeicao}
-
-`;
-
-  lista.forEach(item => {
-    textoFinal += `${item.competencia} - ${item.datas} - ${item.quantidade} ${item.periodo}(s) (${item.empresaTerceirizada})\n`;
+  lista.forEach(function(item){
+    textoFinal += item.competencia + " - "
+      + item.datas + " - "
+      + item.quantidade + " "
+      + item.periodo + "(s) ("
+      + item.empresaTerceirizada + ")\n";
   });
 
-  textoFinal += `\nUnidade: ${unidade}
-
-Terceirizados:
-${nomes}`;
+  textoFinal += "\nUnidade: " + unidade + "\n\n";
+  textoFinal += "Terceirizados:\n" + nomes;
 
   document.getElementById("resultado").value = textoFinal;
 }
-</script>
