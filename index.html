@@ -248,7 +248,44 @@ function salvarModal(){
     periodo
   });
 
-  atualizarLista();
+  function atualizarLista() {
+  let container = document.getElementById("listaRefeicoes");
+  container.innerHTML = "";
+
+  lista.forEach((item, index) => {
+    container.innerHTML += `
+    <div style="
+      background:#f1f1f1;
+      padding:10px;
+      margin-bottom:8px;
+      border-radius:8px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    ">
+      <div style="
+        flex:1;
+        min-width:0;
+        word-break:break-word;
+      ">
+        ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
+      </div>
+
+      <button onclick="remover(${index})"
+        style="
+          background:#dc2626;
+          padding:6px 10px;
+          border-radius:6px;
+          width:auto;
+        ">
+        Excluir
+      </button>
+    </div>
+    `;
+  });
+}
   atualizarContador();
   fecharModal();
 }
@@ -269,6 +306,20 @@ function atualizarLista() {
     </div>
     `;
   });
+}
+
+  function remover(index) {
+
+  // Se remover o item 0 (principal), libera adicionar outra principal
+  if(index === 0){
+    principalAdicionada = false;
+    competenciaPrincipalGlobal = "";
+  }
+
+  lista.splice(index, 1);
+
+  atualizarLista();
+  atualizarContador();
 }
 
 function gerarTexto(){
