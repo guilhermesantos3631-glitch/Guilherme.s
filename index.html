@@ -48,26 +48,7 @@ button:hover {
   background: #1e4ed8;
 }
 
-/* Modal */
-#modal {
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.4);
-  justify-content:center;
-  align-items:center;
-}
-
-.modal-box {
-  background:white;
-  padding:20px;
-  width:90%;
-  max-width:500px;
-  border-radius:10px;
-}
-<style>
-/* ===== MODAL NOVO ===== */
-
+/* ===== MODAL ===== */
 #modal {
   display:none;
   position:fixed;
@@ -76,7 +57,6 @@ button:hover {
   background: rgba(0,0,0,0.25);
   justify-content:center;
   align-items:center;
-  animation: fadeIn 0.2s ease-in-out;
 }
 
 .modal-box {
@@ -85,59 +65,18 @@ button:hover {
   max-width:520px;
   border-radius:14px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-  padding:0;
-  overflow:hidden;
-  animation: slideUp 0.25s ease-out;
+  padding:20px;
 }
 
 .modal-header {
   background:#2563eb;
   color:white;
-  padding:15px 20px;
-  font-weight:bold;
+  padding:10px;
+  border-radius:8px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-}
-
-.modal-sub {
-  padding:15px 20px 0 20px;
-  font-size:14px;
-  color:#555;
-}
-
-.modal-box label,
-.modal-box input,
-.modal-box select {
-  margin-left:20px;
-  margin-right:20px;
-}
-
-.modal-box input,
-.modal-box select {
-  width:calc(100% - 40px);
-}
-
-.modal-actions {
-  display:flex;
-  gap:10px;
-  padding:20px;
-}
-
-.btn-save {
-  background:#16a34a;
-}
-
-.btn-save:hover {
-  background:#15803d;
-}
-
-.btn-cancel {
-  background:#9ca3af;
-}
-
-.btn-cancel:hover {
-  background:#6b7280;
+  margin-bottom:15px;
 }
 
 .close-btn {
@@ -147,17 +86,7 @@ button:hover {
   font-size:16px;
   cursor:pointer;
 }
-
-/* animações */
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity:0; }
-  to { transform: translateY(0); opacity:1; }
-}
-
-@keyframes fadeIn {
-  from { opacity:0; }
-  to { opacity:1; }
-}
+</style>
 </head>
 
 <body>
@@ -181,7 +110,8 @@ button:hover {
 <option>CM1</option>
 </select>
 
-  
+<label>Competência</label>
+<select id="competencia">
 <option>Civil</option>
 <option>Elétrica</option>
 <option>Mecânica</option>
@@ -194,13 +124,13 @@ button:hover {
 <label>Empresa fornecedora das refeições</label>
 <input id="empresaRefeicao">
 
-<label>Quantidade de terceirizados</label>
+<label>Quantidade</label>
 <input type="number" id="quantidade">
 
-<label>Período (Ex: 01/03 a 05/03)</label>
+<label>Período (datas)</label>
 <input id="datas">
 
-<label>Almoço, Janta ou ambos</label>
+<label>Almoço / Janta</label>
 <select id="periodo">
 <option>Almoço</option>
 <option>Janta</option>
@@ -210,7 +140,7 @@ button:hover {
 <label>Nomes dos terceirizados</label>
 <textarea id="nomes"></textarea>
 
-<button type="button" onclick="adicionarRefeicao()">Adicionar Refeição</button>
+<button type="button" onclick="salvarPrincipal()">Adicionar Refeição Principal</button>
 
 <button type="button" onclick="abrirModal()" style="background:#10b981;margin-top:10px;">
 + Adicionar Refeição Extra
@@ -227,26 +157,13 @@ button:hover {
 <textarea id="resultado"></textarea>
 </div>
 
-<!-- MODAL MELHORADO -->
+<!-- MODAL -->
 <div id="modal">
   <div class="modal-box">
-
     <div class="modal-header">
-      <span>➕ Adicionar Refeição Extra</span>
+      <span>➕ Refeição Extra</span>
       <button class="close-btn" onclick="fecharModal()">✖</button>
     </div>
-
-    <p class="modal-sub">
-      Preencha as informações da refeição adicional.
-    </p>
-
-    <label>Competência</label>
-    <select id="m_competencia">
-      <option>Civil</option>
-      <option>Elétrica</option>
-      <option>Mecânica</option>
-      <option>Automações</option>
-    </select>
 
     <label>Empresa terceirizada</label>
     <input id="m_empresa">
@@ -264,20 +181,22 @@ button:hover {
       <option>Almoço e Janta</option>
     </select>
 
-    <div class="modal-actions">
-      <button class="btn-save" onclick="salvarModal()">Salvar Refeição</button>
-      <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
-    </div>
-
+    <button onclick="salvarModal()" style="background:#16a34a;margin-top:10px;">
+      Salvar Refeição Extra
+    </button>
   </div>
 </div>
 
 <script>
 let lista = [];
-  let principalAdicionada = false;
+let principalAdicionada = false;
 let competenciaPrincipalGlobal = "";
 
 function abrirModal(){
+  if(!principalAdicionada){
+    alert("Adicione primeiro a refeição principal.");
+    return;
+  }
   document.getElementById("modal").style.display = "flex";
 }
 
@@ -285,13 +204,32 @@ function fecharModal(){
   document.getElementById("modal").style.display = "none";
 }
 
-function salvarModal(){
-
-  if(!principalAdicionada){
-    alert("Adicione primeiro a refeição principal.");
+function salvarPrincipal(){
+  if(principalAdicionada){
+    alert("A refeição principal já foi adicionada.");
     return;
   }
 
+  let competencia = document.getElementById("competencia").value;
+  let empresa = document.getElementById("empresaTerceirizada").value;
+  let quantidade = document.getElementById("quantidade").value;
+  let datas = document.getElementById("datas").value;
+  let periodo = document.getElementById("periodo").value;
+
+  if (!empresa || !quantidade || !datas) {
+    alert("Preencha todos os campos da refeição principal!");
+    return;
+  }
+
+  competenciaPrincipalGlobal = competencia;
+
+  lista.push({ competencia, empresaTerceirizada: empresa, quantidade, datas, periodo });
+
+  principalAdicionada = true;
+  atualizarLista();
+}
+
+function salvarModal(){
   let empresa = document.getElementById("m_empresa").value;
   let quantidade = document.getElementById("m_quantidade").value;
   let datas = document.getElementById("m_datas").value;
@@ -315,49 +253,9 @@ function salvarModal(){
   fecharModal();
 }
 
-  lista.push({ competencia, empresaTerceirizada: empresa, quantidade, datas, periodo });
-
-  atualizarLista();
-  atualizarContador();
-  fecharModal();
-}
-
 function atualizarContador(){
   document.getElementById("contadorRefeicoes").innerText =
-  "Refeições extras adicionadas: " + lista.length;
-}
-
-function salvarPrincipal(){
-
-  if(principalAdicionada){
-    alert("A refeição principal já foi adicionada. Use '+ Adicionar Refeição Extra'.");
-    return;
-  }
-
-  let competencia = document.getElementById("competencia").value;
-  let empresa = document.getElementById("empresaTerceirizada").value;
-  let quantidade = document.getElementById("quantidade").value;
-  let datas = document.getElementById("datas").value;
-  let periodo = document.getElementById("periodo").value;
-
-  if (!empresa || !quantidade || !datas) {
-    alert("Preencha todos os campos da refeição principal!");
-    return;
-  }
-
-  competenciaPrincipalGlobal = competencia;
-
-  lista.push({
-    competencia,
-    empresaTerceirizada: empresa,
-    quantidade,
-    datas,
-    periodo
-  });
-
-  principalAdicionada = true;
-
-  atualizarLista();
+  "Refeições extras adicionadas: " + (lista.length - 1);
 }
 
 function atualizarLista() {
@@ -368,31 +266,15 @@ function atualizarLista() {
     container.innerHTML += `
     <div style="background:#f1f1f1;padding:8px;margin-bottom:5px;border-radius:6px;">
       ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
-      <button onclick="remover(${index})" style="margin-top:5px;background:red;">Remover</button>
     </div>
     `;
   });
-}
-
-function remover(index) {
-  lista.splice(index, 1);
-  atualizarLista();
-  atualizarContador();
 }
 
 function gerarTexto(){
   let unidade = document.getElementById("unidade").value;
   let empresaRefeicao = document.getElementById("empresaRefeicao").value;
   let nomes = document.getElementById("nomes").value;
-
-  let agrupado = {};
-
-  lista.forEach(item => {
-    if (!agrupado[item.competencia]) {
-      agrupado[item.competencia] = [];
-    }
-    agrupado[item.competencia].push(item);
-  });
 
   let textoFinal = `Prezados(as),
 
@@ -401,15 +283,11 @@ Empresa: ${empresaRefeicao}
 
 `;
 
-  for (let comp in agrupado) {
-    textoFinal += `${comp}:\n`;
-    agrupado[comp].forEach(item => {
-      textoFinal += `${item.datas} - ${item.quantidade} ${item.periodo}(s) (${item.empresaTerceirizada})\n`;
-    });
-    textoFinal += `\n`;
-  }
+  lista.forEach(item => {
+    textoFinal += `${item.competencia} - ${item.datas} - ${item.quantidade} ${item.periodo}(s) (${item.empresaTerceirizada})\n`;
+  });
 
-  textoFinal += `Unidade: ${unidade}
+  textoFinal += `\nUnidade: ${unidade}
 
 Terceirizados:
 ${nomes}`;
