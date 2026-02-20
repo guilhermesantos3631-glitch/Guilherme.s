@@ -214,6 +214,50 @@ select:focus {
   box-shadow: 0 0 15px rgba(212,175,55,0.5);
 }
 
+  /* ===== EFEITO VIDRO NOS SELECT ===== */
+
+select {
+  width: 100%;
+  padding: 12px 40px 12px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(212,175,55,0.35);
+
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+
+  appearance: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+/* seta customizada */
+select {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23d4af37' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px;
+}
+
+/* foco dourado */
+select:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 18px rgba(212,175,55,0.6);
+}
+
+/* opções internas */
+select option {
+  background: #3b0000;
+  color: #ffffff;
+}
+
 /* ===== COR DAS OPÇÕES ===== */
 
 select option {
