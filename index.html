@@ -248,7 +248,24 @@ function salvarModal(){
     periodo
   });
 
-  atualizarLista();
+  function atualizarLista() {
+  let container = document.getElementById("listaRefeicoes");
+  container.innerHTML = "";
+
+  lista.forEach((item, index) => {
+    container.innerHTML += `
+    <div class="item-lista">
+      <div class="texto-item">
+        ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
+      </div>
+
+      <button class="btn-excluir" onclick="remover(${index})">
+        Excluir
+      </button>
+    </div>
+    `;
+  });
+}
   atualizarContador();
   fecharModal();
 }
