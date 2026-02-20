@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
-<head> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sistema de Refeições</title>
+
 <style>
 body {
   font-family: Arial, sans-serif;
@@ -50,34 +52,9 @@ textarea {
   height: 150px;
   resize: vertical;
 }
-
-/* 📱 Ajuste para celular */
-@media (max-width: 600px) {
-  body {
-    padding: 15px;
-  }
-
-  .container {
-    padding: 15px;
-    border-radius: 8px;
-  }
-
-  h2 {
-    font-size: 18px;
-    text-align: center;
-  }
-
-  input, select, textarea {
-    font-size: 16px;
-  }
-
-  button {
-    font-size: 16px;
-  }
-}
-
 </style>
 </head>
+
 <body>
 
 <div class="container">
@@ -129,36 +106,17 @@ textarea {
 <label>Nomes dos terceirizados</label>
 <textarea id="nomes"></textarea>
 
+<button type="button" onclick="adicionarRefeicao()">Adicionar Refeição</button>
+
+<h3>Lista adicionada:</h3>
+<div id="listaRefeicoes"></div>
+
 <button onclick="gerarTexto()">Gerar Texto</button>
 
 <h3>Texto Gerado</h3>
 <textarea id="resultado"></textarea>
 
-<html>
-  <label>Unidade</label>
-<select id="unidade">
-<option>Y01</option>
-<option>Y02</option>
-<option>Y03</option>
-<option>Y04</option>
-<option>Y08</option>
-<option>Y12</option>
-<option>N01</option>
-<option>N04</option>
-<option>N06</option>
-<option>P02</option>
-<option>YP1</option>
-<option>CM1</option>
-</select>
-<input type="text" id="empresaTerceirizada" placeholder="Empresa">
-<input type="number" id="quantidade" placeholder="Quantidade">
-<input type="date" id="datas">
-<input type="text" id="periodo" placeholder="Período">
-
-<button type="button" onclick="adicionarRefeicao()">Adicionar Refeição</button>
-
-<h3>Lista adicionada:</h3>
-<div id="listaRefeicoes"></div>
+</div>
 
 <script>
 let lista = [];
@@ -190,15 +148,15 @@ function atualizarLista() {
     let container = document.getElementById("listaRefeicoes");
     container.innerHTML = "";
 
-    lista.forEach((item) => {
+    lista.forEach((item, index) => {
         container.innerHTML += `
         <div style="background:#f1f1f1;padding:8px;margin-bottom:5px;border-radius:6px;">
             ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
+            <button onclick="remover(${index})" style="margin-top:5px;background:red;">Remover</button>
         </div>
         `;
     });
 }
-<script>
 
 function remover(index) {
   lista.splice(index, 1);
@@ -206,43 +164,41 @@ function remover(index) {
 }
 
 function gerarTexto(){
-let unidade = document.getElementById("unidade").value;
-let empresaRefeicao = document.getElementById("empresaRefeicao").value;
-let nomes = document.getElementById("nomes").value;
+  let unidade = document.getElementById("unidade").value;
+  let empresaRefeicao = document.getElementById("empresaRefeicao").value;
+  let nomes = document.getElementById("nomes").value;
 
-let agrupado = {};
+  let agrupado = {};
 
-lista.forEach(item => {
-  if (!agrupado[item.competencia]) {
-    agrupado[item.competencia] = [];
-  }
-  agrupado[item.competencia].push(item);
-});
+  lista.forEach(item => {
+    if (!agrupado[item.competencia]) {
+      agrupado[item.competencia] = [];
+    }
+    agrupado[item.competencia].push(item);
+  });
 
-let textoFinal = `Prezados(as),
+  let textoFinal = `Prezados(as),
 
 Segue lista de refeições.
 Empresa: ${empresaRefeicao}
 
 `;
 
-for (let comp in agrupado) {
-  textoFinal += `${comp}:\n`;
-  agrupado[comp].forEach(item => {
-    textoFinal += `${item.datas} - ${item.quantidade} ${item.periodo}(s) (${item.empresaTerceirizada})\n`;
-  });
-  textoFinal += `\n`;
-}
+  for (let comp in agrupado) {
+    textoFinal += `${comp}:\n`;
+    agrupado[comp].forEach(item => {
+      textoFinal += `${item.datas} - ${item.quantidade} ${item.periodo}(s) (${item.empresaTerceirizada})\n`;
+    });
+    textoFinal += `\n`;
+  }
 
-textoFinal += `Unidade: ${unidade}
+  textoFinal += `Unidade: ${unidade}
 
 Terceirizados:
 ${nomes}`;
 
-document.getElementById("resultado").value = textoFinal;
+  document.getElementById("resultado").value = textoFinal;
 }
-</script>
-
 </script>
 
 </body>
