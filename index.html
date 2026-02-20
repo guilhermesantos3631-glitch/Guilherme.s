@@ -1,67 +1,90 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Solicitação de Refeições</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Refeições</title>
 
 <style>
-body{
+body {
   font-family: Arial, sans-serif;
-  background:#f5f5f5;
-  padding:20px;
+  background: #f4f4f4;
+  padding: 40px;
+  margin: 0;
 }
 
-.container{
-  max-width:800px;
-  margin:auto;
-  background:#fff;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+.container {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  max-width: 700px;
+  margin: auto;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
-input, select, textarea{
-  width:100%;
-  padding:8px;
-  margin-bottom:10px;
-  border-radius:6px;
-  border:1px solid #ccc;
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
-button{
-  padding:8px 12px;
-  border:none;
-  border-radius:6px;
-  background:#2563eb;
-  color:#fff;
-  cursor:pointer;
+button {
+  padding: 12px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+  width: 100%;
 }
 
-button:hover{
-  opacity:0.9;
+button:hover {
+  background: #1e4ed8;
 }
 
-#modal{
+/* ===== MODAL ===== */
+#modal {
   display:none;
   position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.5);
+  inset:0;
+  backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.25);
   justify-content:center;
   align-items:center;
 }
 
-.modal-content{
-  background:#fff;
+.modal-box {
+  background:white;
+  width:95%;
+  max-width:520px;
+  border-radius:14px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
   padding:20px;
-  border-radius:10px;
-  width:400px;
 }
 
-#listaRefeicoes{
-  margin-top:15px;
+.modal-header {
+  background:#2563eb;
+  color:white;
+  padding:10px;
+  border-radius:8px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+}
+
+.close-btn {
+  background:none;
+  border:none;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -69,65 +92,107 @@ button:hover{
 <body>
 
 <div class="container">
+<h2>Sistema de Solicitação de Refeições</h2>
 
-<h2>Refeição Principal</h2>
-
-<input id="competencia" placeholder="Competência (ex: 05/2026)">
-<input id="empresaTerceirizada" placeholder="Empresa Terceirizada">
-<input id="quantidade" type="number" placeholder="Quantidade">
-<input id="datas" placeholder="Datas (ex: 10,11,12/05)">
-<select id="periodo">
-  <option value="Almoço">Almoço</option>
-  <option value="Jantar">Jantar</option>
+<label>Unidade</label>
+<select id="unidade">
+<option>Y01</option>
+<option>Y02</option>
+<option>Y03</option>
+<option>Y04</option>
+<option>Y08</option>
+<option>Y12</option>
+<option>N01</option>
+<option>N04</option>
+<option>N06</option>
+<option>P02</option>
+<option>YP1</option>
+<option>CM1</option>
 </select>
 
-<button onclick="salvarPrincipal()">Salvar Principal</button>
-<button onclick="abrirModal()">Adicionar Extra</button>
+<label>Competência</label>
+<select id="competencia">
+<option>Civil</option>
+<option>Elétrica</option>
+<option>Mecânica</option>
+<option>Automações</option>
+</select>
 
-<p id="contadorRefeicoes">Refeições extras adicionadas: 0</p>
+<label>Empresa terceirizada</label>
+<input id="empresaTerceirizada">
 
+<label>Empresa fornecedora das refeições</label>
+<input id="empresaRefeicao">
+
+<label>Quantidade</label>
+<input type="number" id="quantidade">
+
+<label>Período (datas)</label>
+<input id="datas">
+
+<label>Almoço / Janta</label>
+<select id="periodo">
+<option>Almoço</option>
+<option>Janta</option>
+<option>Almoço e Janta</option>
+</select>
+
+<label>Nomes dos terceirizados</label>
+<textarea id="nomes"></textarea>
+
+<button type="button" onclick="salvarPrincipal()">Adicionar Refeição Principal</button>
+
+<button type="button" onclick="abrirModal()" style="background:#10b981;margin-top:10px;">
++ Adicionar Refeição Extra
+</button>
+
+<div id="contadorRefeicoes" style="margin-top:10px;font-weight:bold;"></div>
+
+<h3>Lista adicionada:</h3>
 <div id="listaRefeicoes"></div>
-
-<hr>
-
-<h3>Dados Finais</h3>
-
-<input id="unidade" placeholder="Unidade">
-<input id="empresaRefeicao" placeholder="Empresa da Refeição">
-<textarea id="nomes" rows="4" placeholder="Nome dos terceirizados"></textarea>
 
 <button onclick="gerarTexto()">Gerar Texto</button>
 
-<textarea id="resultado" rows="10"></textarea>
-
+<h3>Texto Gerado</h3>
+<textarea id="resultado"></textarea>
 </div>
 
 <!-- MODAL -->
 <div id="modal">
-  <div class="modal-content">
-    <h3>Adicionar Refeição Extra</h3>
+  <div class="modal-box">
+    <div class="modal-header">
+      <span>➕ Refeição Extra</span>
+      <button class="close-btn" onclick="fecharModal()">✖</button>
+    </div>
 
-    <input id="m_empresa" placeholder="Empresa Terceirizada">
-    <input id="m_quantidade" type="number" placeholder="Quantidade">
-    <input id="m_datas" placeholder="Datas">
+    <label>Empresa terceirizada</label>
+    <input id="m_empresa">
+
+    <label>Quantidade</label>
+    <input type="number" id="m_quantidade">
+
+    <label>Período (datas)</label>
+    <input id="m_datas">
+
+    <label>Almoço / Janta</label>
     <select id="m_periodo">
-      <option value="Almoço">Almoço</option>
-      <option value="Jantar">Jantar</option>
+      <option>Almoço</option>
+      <option>Janta</option>
+      <option>Almoço e Janta</option>
     </select>
 
-    <button onclick="salvarModal()">Salvar</button>
-    <button onclick="fecharModal()">Fechar</button>
+    <button onclick="salvarModal()" style="background:#16a34a;margin-top:10px;">
+      Salvar Refeição Extra
+    </button>
   </div>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function(){
-
 let lista = [];
 let principalAdicionada = false;
 let competenciaPrincipalGlobal = "";
 
-window.abrirModal = function(){
+function abrirModal(){
   if(!principalAdicionada){
     alert("Adicione primeiro a refeição principal.");
     return;
@@ -135,11 +200,11 @@ window.abrirModal = function(){
   document.getElementById("modal").style.display = "flex";
 }
 
-window.fecharModal = function(){
+function fecharModal(){
   document.getElementById("modal").style.display = "none";
 }
 
-window.salvarPrincipal = function(){
+function salvarPrincipal(){
   if(principalAdicionada){
     alert("A refeição principal já foi adicionada.");
     return;
@@ -161,12 +226,10 @@ window.salvarPrincipal = function(){
   lista.push({ competencia, empresaTerceirizada: empresa, quantidade, datas, periodo });
 
   principalAdicionada = true;
-
   atualizarLista();
-  atualizarContador();
 }
 
-window.salvarModal = function(){
+function salvarModal(){
   let empresa = document.getElementById("m_empresa").value;
   let quantidade = document.getElementById("m_quantidade").value;
   let datas = document.getElementById("m_datas").value;
@@ -191,9 +254,8 @@ window.salvarModal = function(){
 }
 
 function atualizarContador(){
-  let extras = lista.length > 0 ? lista.length - 1 : 0;
   document.getElementById("contadorRefeicoes").innerText =
-    "Refeições extras adicionadas: " + extras;
+  "Refeições extras adicionadas: " + (lista.length - 1);
 }
 
 function atualizarLista() {
@@ -202,51 +264,36 @@ function atualizarLista() {
 
   lista.forEach((item, index) => {
     container.innerHTML += `
-    <div style="background:#f1f1f1;padding:10px;margin-bottom:8px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
-      <div style="flex:1;min-width:0;word-break:break-word;">
-        ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
-      </div>
-      <button onclick="remover(${index})" style="background:#dc2626;">Excluir</button>
+    <div style="background:#f1f1f1;padding:8px;margin-bottom:5px;border-radius:6px;">
+      ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
     </div>
     `;
   });
 }
 
-window.remover = function(index){
-  if(index === 0){
-    principalAdicionada = false;
-    competenciaPrincipalGlobal = "";
-  }
-
-  lista.splice(index, 1);
-  atualizarLista();
-  atualizarContador();
-}
-
-window.gerarTexto = function(){
+function gerarTexto(){
   let unidade = document.getElementById("unidade").value;
   let empresaRefeicao = document.getElementById("empresaRefeicao").value;
   let nomes = document.getElementById("nomes").value;
 
-  let textoFinal = "Prezados(as),\n\n";
-  textoFinal += "Segue lista de refeições.\n";
-  textoFinal += "Empresa: " + empresaRefeicao + "\n\n";
+  let textoFinal = `Prezados(as),
 
-  lista.forEach(function(item){
-    textoFinal += item.competencia + " - "
-      + item.datas + " - "
-      + item.quantidade + " "
-      + item.periodo + "(s) ("
-      + item.empresaTerceirizada + ")\n";
+Segue lista de refeições.
+Empresa: ${empresaRefeicao}
+
+`;
+
+  lista.forEach(item => {
+    textoFinal += `${item.competencia} - ${item.datas} - ${item.quantidade} ${item.periodo}(s) (${item.empresaTerceirizada})\n`;
   });
 
-  textoFinal += "\nUnidade: " + unidade + "\n\n";
-  textoFinal += "Terceirizados:\n" + nomes;
+  textoFinal += `\nUnidade: ${unidade}
+
+Terceirizados:
+${nomes}`;
 
   document.getElementById("resultado").value = textoFinal;
 }
-
-});
 </script>
 
 </body>
