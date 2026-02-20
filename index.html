@@ -264,10 +264,9 @@ function atualizarLista() {
 
   lista.forEach((item, index) => {
     container.innerHTML += `
-    <div class="item-lista">
-      <div class="texto-item">
-        ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
-      </div>
+    <div style="background:#f1f1f1;padding:8px;margin-bottom:5px;border-radius:6px;">
+      ${item.competencia} - ${item.datas} - ${item.quantidade} - ${item.periodo} (${item.empresaTerceirizada})
+    </div>
 
       <button class="btn-excluir" onclick="remover(${index})">
         Excluir
