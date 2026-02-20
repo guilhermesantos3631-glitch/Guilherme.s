@@ -311,12 +311,12 @@ function atualizarLista() {
 function gerarTexto(){
   let unidade = document.getElementById("unidade").value;
   let empresaRefeicao = document.getElementById("empresaRefeicao").value;
-  let nomes = document.getElementById("nomes").value;
+  let nomes = document.getElementById("nomes").value.trim();
 
   let textoFinal = `Prezados(as),
 
-Segue lista de refeições.
-Empresa: ${empresaRefeicao}
+Segue solicitação de refeições.
+Empresa fornecedora: ${empresaRefeicao}
 
 `;
 
@@ -328,10 +328,12 @@ Empresa: ${empresaRefeicao}
     textoFinal += `${item.competencia} - ${periodoFormatado} - ${item.quantidade} ${item.periodo}(s) (${item.empresaTerceirizada})\n`;
   });
 
-  textoFinal += `\nUnidade: ${unidade}
+  textoFinal += `\nUnidade: ${unidade}`;
 
-Terceirizados:
-${nomes}`;
+  // ✅ Só adiciona se tiver nomes preenchidos
+  if(nomes !== ""){
+    textoFinal += `\n\nTerceirizados:\n${nomes}`;
+  }
 
   document.getElementById("resultado").value = textoFinal;
 }
